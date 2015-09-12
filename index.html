@@ -1,0 +1,135 @@
+<!DOCTYPE>
+
+<html>
+    
+    <head>
+        <!--<link href="pace.css" rel="stylesheet">-->
+        <link href="spop.min.css" rel="stylesheet">
+        <!-- Latest compiled and minified CSS -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+
+    </head>
+    
+    <body>
+        <center>
+            <h1>Search Pincode</h1><br>
+            <form action="#"  onsubmit="return getPin()">
+                <input type="text" placeholder="Enter the district name" id="searchBox" value="" />
+                <input type="submit" />
+            </form>
+            <ul>
+            </ul>
+        </center>
+    </body>
+    
+    <!-- Latest compiled and minified JavaScript -->
+   <!-- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>-->
+
+    <script src="//fast.eager.io/0IpMziq67b.js"></script>
+    <!--<script src="pace.js"></script>-->
+    <script src="spop.min.js"></script>
+    <script>
+    
+         function getCORS(url, success) {
+            var xhr = new XMLHttpRequest();
+            xhr.open('GET', url);
+            xhr.onload = success;
+            xhr.send();
+            return xhr;
+        }
+
+        function getPin()
+        {
+            //console.log("Get Pin function");
+            
+            var serachVal=document.getElementById("searchBox");
+            var filtetVal=serachVal.value;
+            //console.log(serachVal.value);
+            
+    try
+    {
+        
+// example request
+getCORS('https://data.gov.in/api/datastore/resource.json?resource_id=0a076478-3fd3-4e2c-b2d2-581876f56d77&api-key=df2e448281697e349f5a805f2bf1b43c&fields=officename,pincode,Districtname,statename,Telephone&filters[Districtname]='+filtetVal, function(request)
+        {
+        var response = request.currentTarget.response || request.target.responseText;
+            var data=JSON.parse(response);
+            //console.log(data.records);
+            //console.log(data.count);
+    
+            var el = document.querySelector('ul');
+            el.setAttribute("class","list-group");
+            //el.parentNode.removeChild(el);
+            el.innerHTML="";    
+            //var el=document.createElement('ul');
+            if(data.records.length!=0)
+                {
+                    for(var i=0;i<data.records.length;i++)
+                        {
+                            el.innerHTML += "<li class='list-group-item list-group-item-info'><h2>"+data.records[i].pincode+"</h2><h3>"+data.records[i].officename+"</h3><h4>"+data.records[i].Districtname+"</h4><h5>"+data.records[i].statename+"<h5></li>";
+                            //el.appendChild(response);   
+                        }
+
+                        spop({ template: 'PinCode listed!',
+                                autoclose: 2000,
+                                style: 'success',
+                                position:'top-right'
+                             });
+                }
+                else
+                {
+                     spop({ template: 'Not Found!',
+                                autoclose: 2000,
+                                style: 'error',
+                                position:'top-right'
+                             });   
+                }
+                //document.body.appendChild(el);
+            
+        });
+        
+    }
+    catch(ex)
+        {
+            document.write("Error occured");
+        }
+        
+        }
+        
+
+/*        
+// example request
+getCORS('https://data.gov.in/api/datastore/resource.json?resource_id=0a076478-3fd3-4e2c-b2d2-581876f56d77&api-key=df2e448281697e349f5a805f2bf1b43c&fields=officename,pincode,Districtname,statename,Telephone', function(request)
+        {
+            var response = request.currentTarget.response || request.target.responseText;
+            var data=JSON.parse(response);
+            console.log(data.records);
+            console.log(data.count);
+            
+            var el=document.createElement('table');
+            for(var i=0;i<data.records.length;i++)
+                {
+                    el.innerHTML += "<tr><td>"+data.records[i].officename+"</td><td>"+data.records[i].Districtname+"</td><td>"+data.records[i].statename+"</td><td>"+data.records[i].pincode+"</td><td>"+data.records[i].Telephone+"</td></tr>";
+                    //el.appendChild(response);   
+                }
+                
+                document.body.appendChild(el);
+        });
+        */
+// define a callback function, which accepts the returned JSON data as its only argument
+/*function response(data) {
+    // JSON data in form of a JavaScript object
+    console.log(data);
+}
+
+// create a script tag with the external request URL
+// include "response" as value of the GET param "callback" in the URL
+var script = document.createElement('script');
+script.src = 'https://data.gov.in/api/datastore/resource.json?callback=response&resource_id=0a076478-3fd3-4e2c-b2d2-581876f56d77&api-key=df2e448281697e349f5a805f2bf1b43c&fields=id';
+ //var ex= 'https://data.gov.in/api/datastore/resource.json?callback=response&resource_id=0a076478-3fd3-4e2c-b2d2-581876f56d77&api-key=df2e448281697e349f5a805f2bf1b43c&fields=id';
+
+document.body.appendChild(script);*/
+        
+    </script>
+    
+</html>
